@@ -13,8 +13,7 @@
     "preview": "vite preview --host 0.0.0.0",
     "check:types": "tsc --noEmit",
     "check:backend": "tsc --noEmit -p tsconfig.backend.json",
-    "check": "pnpm test && pnpm check:types && pnpm check:backend",
-    "docs:generate": "node scripts/prepare-guide.mjs && node scripts/prepare-sql.mjs"
+    "check": "pnpm test && pnpm check:types && pnpm check:backend"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.117.2",

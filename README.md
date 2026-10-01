@@ -1,29 +1,20 @@
 # Almira
 
-**Your style, organized.** A responsive, unisex wardrobe companion that helps people rediscover the clothes they own, build outfits and keep their fashion preferences in their own hands.
+A responsive, unisex wardrobe app built with React, TypeScript and Vite. Organize your clothes, create outfits and rediscover what you already own.
 
-Built as a student portfolio project with **React, TypeScript and Vite**, preserving its original purple gradients, glass cards and playful fashion illustrations. The project targets free-tier services with a ₹0 service budget.
-
-![Almira on desktop](docs/images/almira-desktop.jpg)
+![Almira preview](.github/assets/preview.jpg)
 
 ## Features
 
-- Local wardrobe with photos, search, categories, favorites and editing.
-- Outfit builder, saved looks, wear logging and basic rewear insights.
-- Quick styling using owned pieces, occasion, mood and supported color preferences.
-- Optional style profile and editable, user-confirmed fashion memories.
-- Responsive phone/desktop UI, installable app assets and a built-in user guide.
-- JSON backup export/import, including profiles and memories.
-
-## Current status
-
-**Testing build.** Guest wardrobe flows work without an account. Supabase email/password UI and manual cloud profile Save/Load are implemented, with database setup applied to the owner's project. Signed-in profile sync and two-account isolation still need live verification.
-
-Wardrobe, outfits, wear history and photos currently stay on each device. Automatic cloud sync, live Groq styling, feedback learning and sourced fashion photography are unfinished. Today in Style is explicitly labeled sample content with original illustrations. No AI key belongs in browser configuration.
+- Wardrobe photos, search, categories, favorites and editing.
+- Outfit building, saved looks, wear tracking and rewear insights.
+- Local styling from owned pieces, with occasion and color preferences.
+- Optional style profiles and editable, user-confirmed memories.
+- Phone and desktop layouts, JSON backups and an in-app guide under **Settings → How to use Almira**.
 
 ## Run locally
 
-Use Node.js **24** (22.18+ supported) and **pnpm 11.19.0**.
+Use **Node.js 24** and **pnpm 11.19.0**.
 
 ```bash
 git clone https://github.com/himani-2-git/almira.git
@@ -32,41 +23,64 @@ pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-Open the URL Vite prints. No keys are required for the guest experience. For account testing, copy `.env.example` to `.env.local`, fill only the public Supabase URL/publishable key, and follow [connected setup](docs/setup.md).
+Open the local URL printed by Vite. Guest mode works without keys.
 
 ```bash
-pnpm check          # Tests and frontend/backend TypeScript
-pnpm build          # Production files in dist/
-pnpm preview        # Preview the production build
-pnpm docs:generate  # Refresh the guide and combined setup SQL
+pnpm check    # Tests and frontend/backend TypeScript
+pnpm build    # Production build
+pnpm preview  # Preview the build
 ```
 
-## Deploy and test with friends
+## Optional account setup
 
-Use **Cloudflare Pages Free** connected to this GitHub repository. The [deployment guide](docs/deployment.md) covers the first push, exact build settings, public account setup and automatic redeploys. Friends can test guest flows first and report issues through the [bug form](https://github.com/himani-2-git/almira/issues/new/choose).
+For a fresh clone, copy `almira-web/.env.example` to `almira-web/.env.local` and enter the public Supabase URL and publishable key. Local secret files are ignored by Git. Restart Vite after changing them.
 
-Fix on a branch → run checks → review a preview → merge to `main` → Cloudflare rebuilds the testing site. Refresh the app to receive a deployed update. Supabase migrations and Edge Functions have a separate deployment step.
+Database migrations and the prepared `style-me` function are in `almira-web/supabase/`. For a fresh Supabase project, use the [Supabase CLI](https://supabase.com/docs/guides/local-development/cli/getting-started) from `almira-web`:
+
+```bash
+supabase login
+supabase link --project-ref YOUR_PROJECT_REF
+supabase db push
+```
+
+The owner's existing database setup has already been applied manually. Do not apply those migrations to it a second time. Live account/profile tests are still required.
+
+For future AI deployment, `GROQ_API_KEY`, `GROQ_MODEL` and `ALMIRA_ALLOWED_ORIGINS` belong in Supabase Edge Function secrets. The function's `.env.example` shows the server settings. Groq keys and Supabase secret/service-role keys must never use the browser's `VITE_*` variables.
+
+## Deploy
+
+Use **Cloudflare Pages Free** with GitHub integration. Push the repository to `main`, import it in Cloudflare Pages, and configure:
+
+| Setting | Value |
+| --- | --- |
+| Production branch | `main` |
+| Root directory | `almira-web` |
+| Build command | `pnpm check && pnpm build` |
+| Output directory | `dist` |
+| `NODE_VERSION` | `24` |
+| `PNPM_VERSION` | `11.19.0` |
+
+For the first guest pilot, leave `VITE_SUPABASE_*` unset. Share the supplied HTTPS `pages.dev` address. Pushes to `main` rebuild the site; friends should reload after a successful deployment. [Cloudflare deployment guide](https://developers.cloudflare.com/pages/framework-guides/deploy-a-vite3-project/)
+
+To enable account testing, add the public Supabase URL/key to the Production build environment and redeploy. Set Supabase Auth's Site URL and redirect allowlist to the exact app URL. Public email signup needs custom SMTP; Supabase's default email service only supports project-team addresses and two emails per hour. A configured OAuth flow is another option. [Email setup](https://supabase.com/docs/guides/auth/auth-smtp)
+
+Supabase migrations and functions deploy separately from the frontend. The prepared AI function still needs shared quota controls and live verification before public use.
 
 ## Project structure
 
 ```text
-.github/                 CI, bug report and pull request templates
+.github/          Automated checks, bug form and README preview
 almira-web/
-  src/                   React UI, local storage and styling
-  public/                Icons, web manifest, cache worker and hosting headers
-  supabase/              Private database migrations and prepared AI function
-  scripts/               Guide/SQL generation and connection checks
-  tests/                 Profile, styling, server and cache regression tests
-docs/                    Usage, deployment, setup and product roadmap
+  src/            App interface, storage and styling
+  public/         App icons, manifest, cache worker and hosting headers
+  supabase/       Database migrations and prepared server function
+  scripts/        Connection diagnostic
+  tests/          Behavior and regression tests
+README.md         Setup, deployment and project status
 ```
 
-## Documentation
+## Status and feedback
 
-- [User guide](docs/user-guide.md) · also in Settings → How to use Almira
-- [Deployment guide](docs/deployment.md)
-- [Supabase and Groq setup](docs/setup.md)
-- [Roadmap](docs/roadmap.md) and [product requirements](docs/product-requirements.md)
-- [Original rebuild decision](docs/decisions/typescript-rebuild.md)
-- [Contributing](CONTRIBUTING.md) and [security reports](SECURITY.md)
+This is a **testing build**. Guest wardrobe flows work locally. Account UI and manual profile Save/Load are implemented but need signed-in testing. Full wardrobe/photo sync, live Groq styling and sourced fashion coverage remain unfinished; fashion stories are labeled previews.
 
-The owner's legacy PHP recovery archive, personal exports, secret configuration, dependencies and generated builds are excluded from Git. Only source, empty configuration examples and project documentation belong in the repository.
+Report reproducible bugs through the [GitHub bug form](https://github.com/himani-2-git/almira/issues/new/choose). Fix on a branch, run `pnpm check` and `pnpm build`, then open a pull request. Merge to `main` after reviewing checks and the preview. Report exposed credentials or account-isolation problems privately to the repository owner.

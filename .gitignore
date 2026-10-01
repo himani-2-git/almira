@@ -17,8 +17,7 @@ supabase/.branches/
 *.p12
 *.key
 
-# Legacy recovery copy and personal exports are local only
-/archive/
+# Personal exports are local only
 almira-backup-*.json
 
 # Editor and operating system clutter
