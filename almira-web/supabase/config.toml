@@ -1,0 +1,5 @@
+project_id = "almira"
+
+[functions.style-me]
+verify_jwt = true
+entrypoint = "./functions/style-me/index.ts"

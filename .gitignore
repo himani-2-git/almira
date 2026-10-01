@@ -1,0 +1,31 @@
+# Local dependencies, generated builds and tool caches
+node_modules/
+dist/
+.pnpm-store/
+coverage/
+.logs/
+*.log
+*.tsbuildinfo
+supabase/.temp/
+supabase/.branches/
+
+# Private configuration and credentials; commit empty examples only
+.env
+.env.*
+!.env.example
+*.pem
+*.p12
+*.key
+
+# Legacy recovery copy and personal exports are local only
+/archive/
+almira-backup-*.json
+
+# Editor and operating system clutter
+.DS_Store
+Thumbs.db
+Desktop.ini
+.idea/
+.vscode/
+*.swp
+*.tmp
