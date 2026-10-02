@@ -65,7 +65,22 @@ pnpm preview
 
 Checks cover styling, profile validation, server authentication and ownership, and service-worker updates. The production build is written to `almira-web/dist`.
 
-For Cloudflare Pages, use root directory `almira-web`, build command `pnpm check && pnpm build`, output directory `dist`, `NODE_VERSION=24` and `PNPM_VERSION=11.19.0`. Account services and server functions require their own configuration and deployment.
+## Deployment
+
+Cloudflare Workers can serve the built app using [almira-web/wrangler.json](almira-web/wrangler.json). For a Git-connected Worker named `almira`, use:
+
+| Setting | Value |
+| --- | --- |
+| Production branch | `main` |
+| Root directory | `almira-web` |
+| Build command | `pnpm check && pnpm build` |
+| Deploy command | `npx wrangler deploy` |
+| Build variable `NODE_VERSION` | `24` |
+| Build variable `PNPM_VERSION` | `11.19.0` |
+
+Cloudflare Pages is also supported with the same root directory, build command and build variables; its output directory is `dist`.
+
+Account services and server functions require their own configuration and deployment. Public Supabase settings must be set as build variables; private server credentials must never be included in frontend builds.
 
 ## Feedback
 

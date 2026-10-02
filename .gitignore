@@ -8,11 +8,14 @@ coverage/
 *.tsbuildinfo
 supabase/.temp/
 supabase/.branches/
+.wrangler/
 
 # Private configuration and credentials; commit empty examples only
 .env
 .env.*
 !.env.example
+.dev.vars
+.dev.vars.*
 *.pem
 *.p12
 *.key
